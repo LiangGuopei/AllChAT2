@@ -62,4 +62,8 @@ public class DBControl {
             return null;
         }
     }
+
+    public static boolean HasThisData(dbClass dbc, String f){
+        return new File(dbc+f).exists();
+    }
 }

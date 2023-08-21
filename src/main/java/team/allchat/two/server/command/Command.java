@@ -8,10 +8,8 @@ public class Command {
     public String regid;
 //    指令id
 //    /[id]
-    public String usage;
-//    使用方法
-//    当arg为空时显示
-//    不调用super.run时禁用
+    public String usage = "{\"type\":\"error\"}";
+
     public boolean run(String arg, IoSession iosession){
         return true;
     }

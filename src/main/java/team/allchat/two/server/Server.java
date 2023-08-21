@@ -8,7 +8,7 @@ import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.filter.codec.textline.TextLineCodecFactory;
 import org.apache.mina.transport.socket.nio.NioSocketAcceptor;
 import org.junit.Test;
-import team.allchat.two.server.command.CommandControl;
+import team.allchat.two.server.handler.ChatServerHandler;
 import team.allchat.two.server.db.UserJson;
 
 import java.io.IOException;
@@ -20,12 +20,12 @@ public class Server {
 
     public static void main(String[] args) throws IOException {
         DBControl.init();
-        CommandControl.RegisterCommand();
+        ChatServerHandler.RegisterCommand();
         IoAcceptor acceptor = new NioSocketAcceptor();
         //acceptor.getFilterChain().addLast("logger",new LoggingFilter());
         acceptor.getFilterChain().addLast("codec",new ProtocolCodecFilter(new TextLineCodecFactory(StandardCharsets.UTF_8)));
 
-        acceptor.setHandler(new CommandControl());
+        acceptor.setHandler(new ChatServerHandler());
         acceptor.bind(new InetSocketAddress(23334));
         log.info("server start in 23334");
     }

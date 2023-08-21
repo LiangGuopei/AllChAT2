@@ -19,4 +19,13 @@ public class UserJson {
     public JSONObject ToJsonObject(){
         return JSONObject.parseObject(JSON.toJSONString(this));
     }
+
+    public static UserJson FromStringToUserJson(String a){
+        try{
+            JSONObject object = JSONObject.parseObject(a);
+            return new UserJson(object.getString("username"),object.getString("password"));
+        }catch (Exception e){
+            return null;
+        }
+    }
 }
