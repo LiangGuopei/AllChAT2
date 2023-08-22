@@ -9,9 +9,7 @@ import team.allchat.two.server.command.Command;
 import team.allchat.two.server.db.UserJson;
 import team.allchat.two.server.handler.ChatServerHandler;
 
-import java.util.Arrays;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 public class LoginCommand extends Command {
@@ -51,8 +49,32 @@ public class LoginCommand extends Command {
         }
         UUID retuuid = UUID.randomUUID();
         ChatServerHandler.tokenlist.put(ujson.username,retuuid);
+        //ChatServerHandler.tokenlist.put(ujson.username,UUID.fromString("22e232c4-6ca1-4bec-8078-76d92a2d3e03"));
+
+
         iosession.write(String.format("{\"type\":\"ok\",\"token\":\"%s\"}", retuuid));
         log.info("a user login , username: "+ujson.username);
+
+        for (ChatServerHandler.healthuserclass healthuserclass : ChatServerHandler.onlineUser) {
+            if(healthuserclass.username.equals(ifstr1[0])){
+                healthuserclass.timer.cancel();
+                ChatServerHandler.onlineUser.remove(healthuserclass);
+                break; //删除用户在线状态
+            }
+        }
+        ChatServerHandler.healthuserclass hhc = new ChatServerHandler.healthuserclass();
+        hhc.timer = new Timer();
+        hhc.username = ifstr1[0];
+        hhc.timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                log.info("a user offline! name: "+hhc.username);
+                ChatServerHandler.onlineUser.remove(hhc);
+            }
+        },4000);
+        ChatServerHandler.onlineUser.add(hhc);
+
+
         return true;
     }
 }
